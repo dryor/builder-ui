@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Builder-specific global styles */
+@layer base {
+  html {
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  /* Overlay selection styles */
+  .builder-overlay {
+    @apply absolute pointer-events-none border-2 border-builder-primary bg-builder-primary/10 z-overlay rounded-sm;
+    transition: all 0.15s ease-in-out;
+  }
+  
+  .builder-selection-handle {
+    @apply absolute w-2 h-2 bg-builder-primary border border-white z-selection rounded-sm pointer-events-auto;
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .builder-selection-handle:hover {
+    @apply scale-125 shadow-sm;
+  }
+  
+  /* Component selection states */
+  .builder-selected {
+    @apply ring-2 ring-builder-primary ring-opacity-50;
+  }
+  
+  .builder-hover {
+    @apply ring-1 ring-builder-accent ring-opacity-30;
+  }
+  
+  /* Drag handle styles */
+  .builder-drag-handle {
+    @apply absolute top-0 left-0 w-full h-full cursor-move opacity-0 hover:opacity-100 transition-opacity;
+  }
+  
+  /* Moveable.js styling overrides */
+  .moveable-control-box {
+    @apply pointer-events-auto;
+  }
+  
+  .moveable-line {
+    @apply bg-builder-primary;
+  }
+  
+  .moveable-control {
+    @apply bg-builder-primary border border-white rounded-sm;
+    width: 8px !important;
+    height: 8px !important;
+  }
+  
+  .moveable-control:hover {
+    @apply scale-125 shadow-sm;
+  }
+}
+
+@layer utilities {
+  .builder-selectable {
+    @apply relative;
+  }
+  
+  .builder-dragging {
+    @apply opacity-50 z-overlay;
+  }
+}
