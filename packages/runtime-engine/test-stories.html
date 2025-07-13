@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IR Stories Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { padding: 20px; font-family: sans-serif; }
+        .story-container { 
+            margin: 20px 0; 
+            padding: 16px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+        }
+        .story-title { 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            color: #334155; 
+        }
+    </style>
+</head>
+<body>
+    <h1>IR Renderer Stories Test</h1>
+    
+    <div class="story-container">
+        <div class="story-title">BasicButton Story</div>
+        <div id="basic-button-container"></div>
+    </div>
+    
+    <div class="story-container">
+        <div class="story-title">BasicRow Story</div>
+        <div id="basic-row-container"></div>
+    </div>
+    
+    <div class="story-container">
+        <div class="story-title">BasicStack Story</div>
+        <div id="basic-stack-container"></div>
+    </div>
+    
+    <div class="story-container">
+        <div class="story-title">RowWithButtons Story</div>
+        <div id="row-with-buttons-container"></div>
+    </div>
+
+    <script type="module">
+        // Mock IR components and renderer for testing
+        
+        class IRRenderer {
+            constructor() {
+                this.options = { classPrefix: 'builder-' };
+            }
+            
+            render(component) {
+                return this.renderComponent(component);
+            }
+            
+            renderComponent(component) {
+                let element;
+                
+                switch (component.type) {
+                    case 'Button':
+                        element = this.renderButton(component);
+                        break;
+                    case 'Row':
+                        element = this.renderRow(component);
+                        break;
+                    case 'Stack':
+                        element = this.renderStack(component);
+                        break;
+                    default:
+                        element = document.createElement('div');
+                        element.textContent = `Unknown: ${component.type}`;
+                }
+                
+                // Set common attributes
+                element.setAttribute('data-testid', component.id);
+                element.setAttribute('data-ir-component', component.id);
+                element.setAttribute('data-ir-type', component.type);
+                element.classList.add('builder-selectable');
+                
+                // Render children
+                if (component.children && component.children.length > 0) {
+                    component.children.forEach(child => {
+                        const childElement = this.renderComponent(child);
+                        element.appendChild(childElement);
+                    });
+                }
+                
+                return element;
+            }
+            
+            renderButton(component) {
+                const element = document.createElement('button');
+                element.className = 'builder-button rounded font-medium transition-colors duration-200';
+                
+                const props = component.props || {};
+                
+                // Apply variant
+                const variant = props.variant || 'primary';
+                if (variant === 'primary') {
+                    element.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                } else if (variant === 'secondary') {
+                    element.classList.add('bg-gray-600', 'text-white', 'hover:bg-gray-700');
+                } else if (variant === 'outline') {
+                    element.classList.add('border-2', 'border-blue-600', 'text-blue-600', 'hover:bg-blue-600', 'hover:text-white');
+                }
+                
+                // Apply size
+                const size = props.size || 'md';
+                if (size === 'sm') {
+                    element.classList.add('px-3', 'py-1.5', 'text-sm');
+                } else {
+                    element.classList.add('px-4', 'py-2', 'text-base');
+                }
+                
+                // Set text content
+                if (props.children && Array.isArray(props.children)) {
+                    element.textContent = props.children.join(' ');
+                }
+                
+                return element;
+            }
+            
+            renderRow(component) {
+                const element = document.createElement('div');
+                element.className = 'builder-row flex flex-row';
+                
+                const props = component.props || {};
+                
+                // Apply gap
+                const gap = props.gap || 'md';
+                if (gap === 'sm') element.classList.add('gap-2');
+                else if (gap === 'lg') element.classList.add('gap-6');
+                else element.classList.add('gap-4');
+                
+                // Apply alignment
+                const alignItems = props.alignItems || 'center';
+                element.classList.add(`items-${alignItems}`);
+                
+                const justifyContent = props.justifyContent || 'start';
+                element.classList.add(`justify-${justifyContent}`);
+                
+                return element;
+            }
+            
+            renderStack(component) {
+                const element = document.createElement('div');
+                element.className = 'builder-stack flex flex-col';
+                
+                const props = component.props || {};
+                
+                // Apply gap
+                const gap = props.gap || 'md';
+                if (gap === 'sm') element.classList.add('gap-2');
+                else if (gap === 'lg') element.classList.add('gap-6');
+                else element.classList.add('gap-4');
+                
+                // Apply alignment
+                const alignItems = props.alignItems || 'start';
+                element.classList.add(`items-${alignItems}`);
+                
+                return element;
+            }
+        }
+        
+        // Story components
+        const basicButtonComponent = {
+            id: 'basic-button-story',
+            type: 'Button',
+            props: {
+                variant: 'primary',
+                children: ['Click me'],
+            },
+            children: [],
+            slots: {},
+        };
+        
+        const basicRowComponent = {
+            id: 'basic-row-story',
+            type: 'Row',
+            props: {
+                gap: 'md',
+                alignItems: 'center',
+            },
+            children: [],
+        };
+        
+        const basicStackComponent = {
+            id: 'basic-stack-story',
+            type: 'Stack',
+            props: {
+                gap: 'lg',
+                alignItems: 'start',
+            },
+            children: [],
+        };
+        
+        const rowWithButtonsComponent = {
+            id: 'test-row-1',
+            type: 'Row',
+            props: {
+                gap: 'md',
+                alignItems: 'center',
+            },
+            children: [
+                {
+                    id: 'button-1',
+                    type: 'Button',
+                    props: { variant: 'primary', children: ['Button 1'] },
+                    children: [], slots: {}
+                },
+                {
+                    id: 'button-2',
+                    type: 'Button',
+                    props: { variant: 'secondary', children: ['Button 2'] },
+                    children: [], slots: {}
+                },
+                {
+                    id: 'button-3',
+                    type: 'Button',
+                    props: { variant: 'outline', children: ['Button 3'] },
+                    children: [], slots: {}
+                }
+            ],
+        };
+        
+        // Render stories
+        const renderer = new IRRenderer();
+        
+        // Render all stories
+        document.getElementById('basic-button-container').appendChild(renderer.render(basicButtonComponent));
+        document.getElementById('basic-row-container').appendChild(renderer.render(basicRowComponent));
+        document.getElementById('basic-stack-container').appendChild(renderer.render(basicStackComponent));
+        document.getElementById('row-with-buttons-container').appendChild(renderer.render(rowWithButtonsComponent));
+        
+        console.log('All stories rendered successfully!');
+    </script>
+</body>
+</html>

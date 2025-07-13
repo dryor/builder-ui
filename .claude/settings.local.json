@@ -9,7 +9,14 @@
       "Bash(pnpm build:*)",
       "Bash(pnpm storybook:*)",
       "Bash(npx storybook@latest doctor:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npx storybook@latest add:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm run test:*)",
+      "Bash(pnpm run:*)",
+      "Bash(timeout 30s pnpm storybook --quiet)",
+      "Bash(timeout 15s pnpm storybook --quiet)",
+      "Bash(timeout 10s pnpm storybook --quiet)"
     ],
     "deny": []
   }

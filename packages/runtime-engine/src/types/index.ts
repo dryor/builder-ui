@@ -121,3 +121,6 @@ export const BuilderEventTypes = {
 } as const;
 
 export type BuilderEventType = typeof BuilderEventTypes[keyof typeof BuilderEventTypes];
+
+// Re-export IR types
+export * from './ir-schema';

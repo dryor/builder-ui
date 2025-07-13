@@ -19,6 +19,9 @@ export * from './utils';
 // Base components
 export * from './components';
 
+// IR (Intermediate Representation) module  
+export * from './ir';
+
 /**
  * Initialize the runtime engine
  * Sets up global event handlers and registers components
