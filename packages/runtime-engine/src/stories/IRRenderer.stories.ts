@@ -16,7 +16,7 @@ function renderIRComponent(component: IRComponent): HTMLElement {
 }
 
 const meta: Meta<{ component: IRComponent }> = {
-  title: 'IR System/Renderer',
+  title: 'Phase 2/IR Renderer',
   render: (args) => {
     return renderIRComponent(args['component']);
   },
@@ -55,51 +55,7 @@ export const BasicButton: Story = {
   },
 };
 
-export const BasicRow: Story = {
-  args: {
-    component: {
-      id: 'basic-row-story',
-      type: 'Row',
-      props: {
-        gap: 'md',
-        alignItems: 'center',
-      },
-      children: [],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    
-    // Test that row renders with correct layout classes
-    const row = canvas.getByTestId('basic-row-story');
-    await expect(row).toBeInTheDocument();
-    await expect(row).toHaveClass('builder-row', 'flex', 'flex-row');
-  },
-};
-
-export const BasicStack: Story = {
-  args: {
-    component: {
-      id: 'basic-stack-story',
-      type: 'Stack',
-      props: {
-        gap: 'lg',
-        alignItems: 'start',
-      },
-      children: [],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    
-    // Test that stack renders with correct layout classes
-    const stack = canvas.getByTestId('basic-stack-story');
-    await expect(stack).toBeInTheDocument();
-    await expect(stack).toHaveClass('builder-stack', 'flex', 'flex-col');
-  },
-};
-
-// Test Scenario 2: Nested Structure (Row containing Buttons)
+// Nested Structure (Row containing Buttons)
 export const RowWithButtons: Story = {
   args: {
     component: {

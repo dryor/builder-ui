@@ -11,7 +11,7 @@ function getShadowContent(canvasElement: HTMLElement) {
 }
 
 const meta: Meta<{ ir: IRComponent; logChanges?: boolean }> = {
-  title: 'Visual Builder/ACTUAL Working Drag Drop',
+  title: 'Phase 2/Drag Drop',
   render: (args) => {
     const container = document.createElement('div');
     container.style.cssText = `
