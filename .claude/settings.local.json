@@ -16,7 +16,11 @@
       "Bash(pnpm run:*)",
       "Bash(timeout 30s pnpm storybook --quiet)",
       "Bash(timeout 15s pnpm storybook --quiet)",
-      "Bash(timeout 10s pnpm storybook --quiet)"
+      "Bash(timeout 10s pnpm storybook --quiet)",
+      "Bash(rg:*)",
+      "Bash(timeout 10s pnpm storybook)",
+      "Bash(mv:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

@@ -59,51 +59,57 @@ builder-ui/
 
 **Tech Stack**: TypeScript, Tailwind CSS, Moveable.js, Vanilla Web Components, Storybook
 
-### 🔄 Phase 2: IR Renderer (IN PROGRESS)
+### 🔄 Phase 2: IR Renderer (IN PROGRESS - Major Advances Made)
 **Goal**: IR → DOM transformation with hierarchical component support
 
-**Architectural Decisions Made**:
-- ✅ **Schema Pattern**: Mixed approach (Option C) - `children` array + named `slots` for flexibility
-- ✅ **Component Validation**: Schema-driven slot validation with component type definitions
-- ✅ **Ordering Strategy**: Array index-based ordering for simplicity
-- ✅ **Movement Algorithm**: Threshold-based extraction (drag within bounds = reorder, drag outside = extract)
-- ✅ **Layout Components**: Row (horizontal) and Stack (vertical) with simple gap/alignment
+**✅ Completed This Session**:
+- ✅ **Web Components Architecture**: Created Row, Stack, and Button components extending BaseComponent
+- ✅ **VisualBuilder Integration**: Updated to use actual Web Components instead of HTML divs
+- ✅ **TypeScript Safety**: Full type safety between IR and component implementations  
+- ✅ **Story Organization**: Cleaned and focused Storybook stories for Phase 2
+- ✅ **Visual Drag Indicators**: Implemented insertion indicators showing where components will be placed
+- ✅ **Build System**: All TypeScript compilation and production builds working
 
-**IR Schema Structure**:
+**🚧 Current Drag & Drop UX**:
+- **Working**: Basic drag/drop between containers with real IR updates
+- **Added**: Visual insertion indicators (blue lines) showing drop position
+- **Row containers**: Horizontal blue line following mouse X position  
+- **Stack containers**: Vertical blue line following mouse Y position
+- **Real-time feedback**: Indicators update as you drag
+
+**IR Schema Structure** (Implemented):
 ```json
 {
   "id": "component-id",
   "type": "Row|Stack|Button", 
-  "props": { "gap": "16px", "align": "center" },
-  "children": [...], // default slot for simple nesting
-  "slots": {           // named slots for complex components
-    "header": [...],
-    "content": [...],
-    "footer": [...]
-  }
+  "props": { "gap": "md", "alignItems": "center", "className": "..." },
+  "children": [...], // Array of child components
+  "slots": { ... }   // Named slots (planned for complex components)
 }
 ```
 
-**Component Type Schema**:
-```json
-{
-  "componentTypes": {
-    "Row": { "allowedSlots": ["main"], "layout": "horizontal" },
-    "Stack": { "allowedSlots": ["main"], "layout": "vertical" }, 
-    "Button": { "allowedSlots": ["main"], "maxChildren": 1 }
-  }
-}
+**Web Components Created**:
+```typescript
+// All extend BaseComponent with drag/drop capabilities
+RowComponent.fromIR(irComponent)    // Horizontal flexbox layout
+StackComponent.fromIR(irComponent)  // Vertical flexbox layout  
+ButtonComponent.fromIR(irComponent) // Interactive button element
 ```
 
-**Planned Deliverables**:
-- Hierarchical JSON schema with children + slots support
-- Component type validation schema  
-- IR to DOM transformation engine with layout support
-- Row/Stack layout components with gap/alignment
-- Threshold-based drag extraction algorithm
-- Component serialization/deserialization with nesting
-- State synchronization between IR and visual components
-- TypeScript interfaces for IR structure and validation
+**📂 Current Storybook Structure**:
+```
+Phase 2/
+├── Drag Drop          # Working drag/drop with visual indicators
+├── IR Renderer        # Core IR → DOM transformation
+├── Web Components     # New layout components showcase
+└── Debug/             # Development testing stories
+```
+
+**🎯 Next Session Priorities**:
+- Improve insertion indicators with precise positioning between elements
+- Add ghost preview showing component size/appearance during drag
+- Implement threshold-based drag extraction for nested layouts
+- Performance optimization for complex drag operations
 
 ### 🔮 Phase 3: Visual Editor (PLANNED)
 **Goal**: Canvas + selection with hierarchical drag/drop UX
@@ -229,6 +235,39 @@ builder-ui/
 | `pnpm storybook` | Start Storybook on port 6006 |
 | `pnpm build-storybook` | Build Storybook for deployment |
 | `pnpm type-check` | Run TypeScript type checking |
+
+## 📊 Current Development Status
+
+**✅ Working Features**:
+- TypeScript Web Components (Row, Stack, Button)
+- IR → DOM transformation with VisualBuilder
+- Basic drag/drop with visual insertion indicators
+- Storybook stories for development/testing
+- Complete build pipeline (TypeScript + Vite)
+
+**🔧 Key Files to Continue Development**:
+```
+packages/runtime-engine/src/
+├── components/
+│   ├── VisualBuilder.ts          # Main integration component  
+│   ├── SimpleDragDemo.ts         # Working drag/drop implementation
+│   ├── row-component.ts          # Row layout Web Component
+│   ├── stack-component.ts        # Stack layout Web Component
+│   └── button-component.ts       # Button Web Component
+├── stories/
+│   ├── DragDrop.stories.ts       # Working drag/drop demos
+│   ├── WebComponents.stories.ts  # Layout component examples
+│   └── DebugDragDrop.stories.ts  # Development testing
+└── ir/
+    ├── renderer.ts               # Core IR → DOM transformation
+    └── utils.ts                  # IR manipulation utilities
+```
+
+**🎯 Technical Debt & Improvements Needed**:
+- Insertion indicators need precise element-based positioning
+- Performance optimization for drag operations
+- Ghost preview implementation (showing component appearance)
+- Better error handling and validation feedback
 
 ## 🎯 Performance Targets
 
